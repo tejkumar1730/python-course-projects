@@ -1,0 +1,13 @@
+order_id,region,product,quantity,unit_price
+1001,South,Notebook,3,25.50
+1002,North,Pen,10,10.00
+1003,South,Folder,2,35.00
+1004,West,Notebook,5,25.50
+1005,East,Pen,7,10.00
+1006,South,Folder,1,35.00
+1007,North,Notebook,4,25.50
+1008,West,Pen,,10.00
+1009,East,Folder,3,35.00
+1010,,Notebook,2,25.50
+1011,South,Pen,6,10.00
+1011,South,Pen,6,10.00

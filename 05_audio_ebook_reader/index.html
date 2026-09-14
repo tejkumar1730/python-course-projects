@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chapter · Audio ebook reader</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3efe7;color:#183b34;font:17px/1.6 system-ui}main{max-width:900px;margin:auto;padding:60px 24px}small{letter-spacing:.18em;text-transform:uppercase}h1{font:normal clamp(38px,7vw,64px)/1.1 Georgia;margin:16px 0}p{color:#52635d}section{background:#fffdf8;border:1px solid #d8ded3;border-radius:20px;padding:28px;margin-top:30px}textarea{width:100%;min-height:260px;padding:18px;border:1px solid #c6d0c9;border-radius:12px;background:#fff;font:16px/1.6 Georgia}label{display:block;margin:16px 0 6px}button,select,input{font:inherit;max-width:100%}button{border:0;border-radius:9px;padding:12px 20px;background:#1d5748;color:white;margin:12px 6px 0 0;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}select{padding:8px;width:100%}.row{display:flex;gap:20px;flex-wrap:wrap}.row>div{flex:1;min-width:180px}#status{min-height:28px}progress{width:100%;accent-color:#1d5748}a{color:inherit}
+</style>
+<main><small>05 / Python course projects</small><h1>A little less reading.<br>A little more listening.</h1><p>Load a UTF-8 text ebook or paste a chapter, choose a voice, and listen at your pace.</p>
+<section><label for="file">Open a text ebook (.txt)</label><input id="file" type="file" accept=".txt,text/plain">
+<label for="text">Your chapter</label><textarea id="text">Welcome to your audio ebook reader. Paste a chapter here, choose a voice, and press Read aloud. You can pause, resume, or stop at any time.</textarea>
+<div class="row"><div><label for="voice">Voice</label><select id="voice"></select></div><div><label for="rate">Reading speed: <span id="speed">1</span>×</label><input id="rate" type="range" min="0.5" max="2" step="0.1" value="1"></div></div>
+<button id="read">Read aloud</button><button id="pause" disabled>Pause</button><button id="stop" disabled>Stop</button>
+<p id="status" role="status" aria-live="polite">Ready to read.</p><progress id="progress" value="0" max="1" aria-label="Reading progress"></progress>
+</section><p>Runs locally. Voice availability and offline support depend on your browser and installed voices. Some voices use an online speech service. TXT and pasted text are supported; PDF and EPUB are not.</p></main>
+<script>
+const $=id=>document.getElementById(id), synth=window.speechSynthesis;
+let voices=[], chunks=[], cursor=0, generation=0, current=null, active=false;
+function status(message){$('status').textContent=message}
+function loadVoices(){voices=synth.getVoices();$('voice').replaceChildren(...voices.map((v,i)=>new Option(`${v.name} (${v.lang})${v.localService?' · local':''}`,i)));if(!voices.length)$('voice').add(new Option('Browser default','-1'))}
+function finish(message){active=false;current=null;$('read').disabled=false;$('pause').disabled=true;$('stop').disabled=true;$('pause').textContent='Pause';status(message)}
+function stop(){generation++;synth.cancel();finish('Stopped.');$('progress').value=0}
+function speak(token){if(token!==generation)return;if(cursor>=chunks.length){$('progress').value=1;finish('Chapter complete.');return}current=new SpeechSynthesisUtterance(chunks[cursor]);current.voice=voices[Number($('voice').value)]||null;current.rate=Number($('rate').value);current.onend=()=>{if(token!==generation)return;cursor++;$('progress').value=cursor/chunks.length;speak(token)};current.onerror=e=>{if(token===generation){generation++;synth.cancel();finish('Speech could not play: '+e.error+'. Try a different voice.')}};status(`Reading part ${cursor+1} of ${chunks.length}.`);synth.speak(current)}
+if(!synth){$('read').disabled=true;status('Speech synthesis is unavailable. Try Chrome or Edge.')}else{loadVoices();synth.onvoiceschanged=loadVoices;$('read').onclick=()=>{const text=$('text').value.trim();if(!text){status('Add some text first.');return}stop();chunks=text.match(/[\s\S]{1,180}(?:\s|$)|[\s\S]{1,180}/g)||[];cursor=0;active=true;$('read').disabled=true;$('pause').disabled=false;$('stop').disabled=false;speak(generation)};$('stop').onclick=stop;$('pause').onclick=()=>{if(!active)return;if(synth.paused){synth.resume();$('pause').textContent='Pause';status(`Reading part ${cursor+1} of ${chunks.length}.`)}else{synth.pause();$('pause').textContent='Resume';status('Paused.')}};window.addEventListener('beforeunload',()=>synth.cancel())}
+$('rate').oninput=()=>{$('speed').textContent=$('rate').value};
+$('file').onchange=async()=>{const file=$('file').files[0];if(!file)return;if(file.size>2000000){status('Choose a text file under 2 MB.');return}if(synth)stop();try{$('text').value=await file.text();status('Loaded: '+file.name)}catch{status('Could not read this file.')}};
+</script></html>

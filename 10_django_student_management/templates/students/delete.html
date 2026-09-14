@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>Delete this record?</h1><div class="card"><p>{{ student.roll_number }} · {{ student.name }}</p><p>This removes the student record from this local database.</p><form method="post">{% csrf_token %}<button class="danger">Confirm delete</button> <a href="{% url 'home' %}">Keep student</a></form></div>{% endblock %}

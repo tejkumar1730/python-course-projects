@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<p class="eyebrow">Student details</p><h1>{% if editing %}Edit student.{% else %}Add a student.{% endif %}</h1><div class="card"><form method="post">{% csrf_token %}{{ form.as_p }}<button>Save student</button> <a href="{% url 'home' %}">Cancel</a></form></div>{% endblock %}

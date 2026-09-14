@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<p class="eyebrow">Let's connect</p><h1>Leave a message.</h1><p class="lead">This demo saves messages locally. It does not send email.</p><div class="card"><form method="post">{% csrf_token %}{{ form.as_p }}<button>Save message</button></form></div>{% endblock %}
