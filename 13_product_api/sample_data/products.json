@@ -1,0 +1,5 @@
+[
+  {"sku": "DEMO-KEYBOARD", "name": "USB Keyboard", "description": "Wired keyboard for everyday work.", "price": "799.00", "stock": 12},
+  {"sku": "DEMO-MOUSE", "name": "Wireless Mouse", "description": "Compact optical mouse with USB receiver.", "price": "499.50", "stock": 25},
+  {"sku": "DEMO-NOTEBOOK", "name": "A5 Notebook", "description": "Ruled notebook with 160 pages.", "price": "89.00", "stock": 40}
+]

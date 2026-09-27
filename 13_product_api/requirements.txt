@@ -1,0 +1,4 @@
+Django==5.2.17
+djangorestframework==3.16.1
+mysqlclient==2.3.0
+python-dotenv==1.2.3
