@@ -1,8 +1,10 @@
 # Python Course Projects
 
-Ten runnable learning projects covering Python fundamentals, SQLite, HTML parsing, exploratory data analysis and Django. Organized as separate folders in one repository for easy review.
+Thirteen learning projects covering Python fundamentals, SQLite, HTML parsing, exploratory data analysis, Django, MySQL and REST APIs. Organized as separate folders in one repository for easy review.
 
-These implementations follow the project titles supplied in the course screenshot. Detailed instructor rubrics and pending exercises were not supplied. The examples are educational demos with synthetic data.
+**For the three resume portfolio projects, start with [PORTFOLIO_START_HERE.md](PORTFOLIO_START_HERE.md).** Projects 11-13 were implemented with AI assistance on 27 September 2026 as current personal portfolio work. Each includes setup, sample data, tests, demo instructions and an interview guide. See [PORTFOLIO_VALIDATION.md](PORTFOLIO_VALIDATION.md) for verification evidence.
+
+Projects 01-10 follow the project titles supplied in the course screenshot; projects 11-13 follow the supplied resume's feature descriptions. Detailed instructor rubrics and pending exercises were not supplied. The examples are educational demos with synthetic data.
 
 ## Projects
 
@@ -18,8 +20,11 @@ These implementations follow the project titles supplied in the course screensho
 | 08 | [Web scraping](08_web_scraping) | Command line | Titles, headings, links, robots-aware single-page fetch |
 | 09 | [Django portfolio](09_django_portfolio) | Browser | Project cards, admin editing, local contact inbox |
 | 10 | [Django student management](10_django_student_management) | Browser | Staff login, student CRUD, validation, search, pagination |
+| 11 | [Job Portal Web Application](11_job_portal) | Browser | Candidate/employer roles, companies, job search, posting and applications |
+| 12 | [Inventory Management System](12_inventory_management) | Command line | MySQL product CRUD, validation, transactional stock tracking and movement history |
+| 13 | [RESTful Product API](13_product_api) | JSON API + browsable API | Authenticated owner-only product CRUD, serializers, search and pagination |
 
-## Quick start (Windows)
+## Quick start for course projects 01-10 (Windows)
 
 Install Python 3.10 or later, then open a terminal in this folder:
 
@@ -33,7 +38,7 @@ python 07_eda/app.py 07_eda/sample_sales.csv --output generated/eda
 python 08_web_scraping/app.py --file 08_web_scraping/sample.html
 ```
 
-On macOS/Linux use `python3 -m venv .venv` and `source .venv/bin/activate`. Only the two Django projects need third-party Python packages; projects 01–08 use the standard library. Each folder has its own README with commands and limitations.
+On macOS/Linux use `python3 -m venv .venv` and `source .venv/bin/activate`. Projects 09-10 need Django; projects 01–08 use the standard library. Projects 11-13 have separate database and dependency instructions in [the portfolio guide](PORTFOLIO_START_HERE.md). Each folder has its own README with commands and limitations.
 
 ## Browser projects
 

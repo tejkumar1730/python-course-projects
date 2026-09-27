@@ -7,3 +7,5 @@ venv/
 .env
 generated/
 *.wav
+staticfiles/
+.pytest_cache/

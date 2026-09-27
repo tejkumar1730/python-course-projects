@@ -1,0 +1,20 @@
+services:
+  mysql:
+    image: mysql:8.4.10
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PORTFOLIO_MYSQL_ROOT_PASSWORD:?Set this in the root .env file}
+      MYSQL_DATABASE: job_portal
+      MYSQL_USER: portfolio
+      MYSQL_PASSWORD: ${PORTFOLIO_MYSQL_PASSWORD:?Set this in the root .env file}
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - portfolio_mysql:/var/lib/mysql
+      - ./portfolio-support/init.sql:/docker-entrypoint-initdb.d/01-projects.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+volumes:
+  portfolio_mysql:
