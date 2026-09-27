@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}{{ job.title }} · Launchpad{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'job_list' %}">← All opportunities</a>
+<div class="detail-layout"><article class="panel detail-content"><div class="card-top"><div class="company-avatar">{{ job.company.name|first }}</div><span class="badge">{{ job.get_employment_type_display }}</span></div><p class="company-name">{{ job.company.name }}</p><h1>{{ job.title }}</h1><p class="muted">{{ job.location }} · Posted {{ job.created_at|date:'j M Y' }}</p><hr><h2>About the role</h2><div class="prose">{{ job.description|linebreaks }}</div><h2>What you will bring</h2><div class="prose">{{ job.requirements|linebreaks }}</div></article>
+<aside class="detail-aside"><section class="panel"><span class="eyebrow">THE DETAILS</span><dl class="detail-list"><dt>Work type</dt><dd>{{ job.get_employment_type_display }}</dd><dt>Location</dt><dd>{{ job.location }}</dd><dt>Annual salary · INR</dt><dd>{% if job.salary_min is not None and job.salary_max is not None %}₹{{ job.salary_min }}–₹{{ job.salary_max }}{% elif job.salary_min is not None %}From ₹{{ job.salary_min }}{% elif job.salary_max is not None %}Up to ₹{{ job.salary_max }}{% else %}Discuss with employer{% endif %}</dd><dt>Applications close</dt><dd>{{ job.closing_date|date:'j M Y'|default:'Open until filled' }}</dd></dl>
+{% if is_owner %}<a class="button full-width" href="{% url 'job_edit' job.pk %}">Edit your role</a><a class="text-action" href="{% url 'applicants' job.pk %}">View applicants →</a>
+{% elif application %}<div class="message success">Applied · {{ application.get_status_display }}</div><a class="text-action" href="{% url 'dashboard' %}">Track your application →</a>
+{% elif not job.accepting_applications %}<p class="muted">Applications are closed.</p>
+{% elif not user.is_authenticated %}<a class="button full-width" href="{% url 'login' %}?next={% url 'apply' job.pk %}">Sign in to apply</a>
+{% elif user.profile.role == 'candidate' %}<a class="button full-width" href="{% url 'apply' job.pk %}">Apply for this role ↗</a>
+{% else %}<p class="muted">Candidates can apply to this role.</p>{% endif %}</section>
+<section class="panel"><h2>Meet {{ job.company.name }}</h2><div class="prose">{{ job.company.description|default:'A growing team looking for its next teammate.'|linebreaks }}</div>{% if job.company.location %}<p class="muted">{{ job.company.location }}</p>{% endif %}{% if job.company.website %}<a href="{{ job.company.website }}" rel="noopener noreferrer" target="_blank">Company website ↗</a>{% endif %}</section></aside></div>
+{% endblock %}

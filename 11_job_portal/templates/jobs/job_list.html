@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy"><span class="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h1>Good work.<br>A fresh start.</h1><p>Explore opportunities, meet growing teams, and take the next step in your career.</p><a href="#open-roles" class="button button-light">Find your next role <span aria-hidden="true">↓</span></a></div>
+  <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="art-label label-top">BUILD SOMETHING REAL</div><div class="art-arrow">↗</div><div class="art-label label-bottom"><span class="mini-dot"></span> Room to grow</div></div>
+</section>
+<section id="open-roles" class="roles-section" aria-labelledby="roles-heading">
+  <div class="section-heading"><div><span class="eyebrow">FIND YOUR FIT</span><h2 id="roles-heading">Open opportunities <span class="count">{{ page_obj.paginator.count }}</span></h2></div><span class="muted">A small step toward something bigger.</span></div>
+  <form class="search-panel" method="get" action="{% url 'job_list' %}">
+    <div><label for="search-keyword">Role or company</label><input id="search-keyword" type="search" name="q" value="{{ query }}" placeholder="Python, developer, company…"></div>
+    <div><label for="search-location">Location</label><input id="search-location" name="location" value="{{ location }}" placeholder="City or remote"></div>
+    <div><label for="search-type">Work type</label><select id="search-type" name="type"><option value="">All types</option>{% for value, label in employment_types %}<option value="{{ value }}" {% if value == selected_type %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+    <button class="button" type="submit">Search roles</button>
+  </form>
+  {% if query or location or selected_type %}<p class="filter-summary">Showing filtered results. <a href="{% url 'job_list' %}">Clear filters</a></p>{% endif %}
+  <div class="job-grid">{% for job in page_obj %}
+    <article class="job-card"><div class="card-top"><div class="company-avatar" aria-hidden="true">{{ job.company.name|first }}</div><span class="badge">{{ job.get_employment_type_display }}</span></div>
+      <p class="company-name">{{ job.company.name }}</p><h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3><p class="muted job-location">{{ job.location }}</p>
+      <p class="job-summary">{{ job.description|truncatechars:105 }}</p><div class="card-bottom"><span>{% if job.salary_min is not None and job.salary_max is not None %}₹{{ job.salary_min }}–{{ job.salary_max }}<small> / year</small>{% elif job.salary_min is not None %}From ₹{{ job.salary_min }}<small> / year</small>{% elif job.salary_max is not None %}Up to ₹{{ job.salary_max }}<small> / year</small>{% else %}Salary on discussion{% endif %}</span><a class="circle-link" href="{% url 'job_detail' job.pk %}" aria-label="View {{ job.title }}">↗</a></div>
+    </article>
+  {% empty %}<div class="empty-state"><span class="empty-symbol">⌕</span><h3>No matching roles yet.</h3><p>Try another keyword or location, or clear your filters.</p><a class="button button-outline" href="{% url 'job_list' %}">See all opportunities</a></div>{% endfor %}</div>
+  {% if page_obj.has_other_pages %}<nav class="pagination" aria-label="Results pages">{% if page_obj.has_previous %}<a class="button button-outline" href="?{{ filters }}&page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}<span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="button button-outline" href="?{{ filters }}&page={{ page_obj.next_page_number }}">Next</a>{% endif %}</nav>{% endif %}
+</section>
+<section class="employer-banner"><div><span class="eyebrow">GROW YOUR TEAM</span><h2>Your next teammate is out there.</h2><p>Share a role and manage applications in one place.</p></div><a class="button" href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'register' %}{% endif %}">Start hiring <span aria-hidden="true">↗</span></a></section>
+{% endblock %}

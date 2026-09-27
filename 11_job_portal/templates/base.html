@@ -1,0 +1,32 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Launchpad · Job portal{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'jobs/style.css' %}">
+  <script src="{% static 'jobs/app.js' %}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><nav class="container nav" aria-label="Main navigation">
+    <a href="{% url 'job_list' %}" class="brand"><span class="brand-mark">L</span> launchpad<span class="brand-dot">.</span></a>
+    <div class="nav-links">
+      <a href="{% url 'job_list' %}">Explore roles</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">My dashboard</a>
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="button button-outline button-small" type="submit">Sign out</button></form>
+      {% else %}
+        <a href="{% url 'login' %}">Sign in</a>
+        <a class="button button-small" href="{% url 'register' %}">Get started <span aria-hidden="true">↗</span></a>
+      {% endif %}
+    </div>
+  </nav></header>
+  <main id="main" class="container main">
+    {% if messages %}<div aria-live="polite" class="messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="container footer"><span>Launchpad · A portfolio job portal by Tej Kumar</span><span>Practice project · Fictional demo companies</span></footer>
+</body>
+</html>
